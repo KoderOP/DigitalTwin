@@ -1,0 +1,57 @@
+{
+ "model": "deep",
+ "thresholds": {
+  "gbm_wearable_only": {
+   "amber": 0.4188,
+   "red": 0.9688
+  },
+  "deep_wearable_only": {
+   "amber": 0.3951,
+   "red": 0.9201
+  },
+  "gbm_ehr_only": {
+   "amber": 0.2785,
+   "red": 0.8035
+  },
+  "deep_ehr_only": {
+   "amber": 0.3005,
+   "red": 0.7755
+  },
+  "gbm_fused": {
+   "amber": 0.45,
+   "red": 0.975
+  },
+  "deep_fused": {
+   "amber": 0.3784,
+   "red": 0.9534
+  }
+ },
+ "refractory_min": 60,
+ "notify_level": "RED",
+ "test_summary": {
+  "gbm_wearable_only": {
+   "roc_auc": 0.9422121623332984,
+   "pr_auc": 0.8818706505667496
+  },
+  "deep_wearable_only": {
+   "roc_auc": 0.9362903193635247,
+   "pr_auc": 0.8706585721020083
+  },
+  "gbm_ehr_only": {
+   "roc_auc": 0.8778618991476141,
+   "pr_auc": 0.754128501319006
+  },
+  "deep_ehr_only": {
+   "roc_auc": 0.8595838422742648,
+   "pr_auc": 0.7273081557382122
+  },
+  "gbm_fused": {
+   "roc_auc": 0.9429774202185813,
+   "pr_auc": 0.8815899128614478
+  },
+  "deep_fused": {
+   "roc_auc": 0.9379415301097207,
+   "pr_auc": 0.8729228972710193
+  }
+ }
+}

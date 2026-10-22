@@ -1,0 +1,19 @@
+services:
+  twin:
+    build: .
+    image: t2d-digital-twin:1.0
+    ports:
+      - "8000:8000"
+    environment:
+      DT_STREAM_MODE: internal     # or "external" + run backend.stream_client
+      DT_START_CLOCK: "17:30"
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+      - ./reports:/app/reports
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 1200s
+      retries: 3

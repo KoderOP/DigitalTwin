@@ -1,0 +1,82 @@
+# Default configuration for the T2D Digital Twin PoC.
+# Override any key with an env var: DT__SECTION__KEY=value (e.g. DT__COHORT__N_PATIENTS=200)
+# or by pointing DT_CONFIG at another YAML file that is merged on top of this one.
+
+seed: 42
+
+paths:
+  data_dir: data            # generated synthetic data (gitignored)
+  artifacts_dir: artifacts  # trained models + scalers
+  reports_dir: reports      # evaluation outputs
+  db_path: data/audit.sqlite3
+
+cohort:
+  n_patients: 150
+  n_days: 30
+  start_date: "2026-01-05"   # a Monday; dates are synthetic
+  urban_fraction: 0.6
+
+simulation:
+  dt_min: 1                 # ODE integration step (minutes)
+  cgm_interval_min: 5
+  calibration_days: 3       # warm-up days used to calibrate basal glucose to EHR HbA1c
+  sensor:
+    lag_min: 8              # interstitial lag (first-order)
+    noise_mult_sd: 0.04     # multiplicative noise
+    noise_add_sd: 3.0       # additive noise mg/dL
+    drift_sd_per_day: 0.02  # slow calibration drift
+    dropout_per_day: 0.35   # expected dropout episodes per day
+    dropout_mean_min: 50
+    compression_per_night: 0.12
+
+dataset:
+  window_hours: 6           # deep model sequence length (6 h x 5 min = 72 steps)
+  history_hours: 24         # history required before the first sample
+  horizon_min: 120
+  spike_threshold: 180
+  hypo_threshold: 70
+  train_stride_min: 15      # sample spacing for GBM training rows
+  deep_train_stride_min: 45 # sample spacing for deep model training rows (CPU budget)
+  eval_stride_min: 5        # evaluation = every 5 minutes (deployment cadence)
+  split: {train: 0.70, val: 0.15, test: 0.15}
+  temporal_holdout_frac: 0.2
+
+gbm:
+  n_estimators: 600
+  learning_rate: 0.04
+  num_leaves: 31
+  min_child_samples: 50
+  subsample: 0.8
+  colsample_bytree: 0.8
+  early_stopping_rounds: 50
+
+deep:
+  encoder: gru              # gru | tcn (dilated causal conv); GRU is faster on the target laptop CPU
+  pool: 2                   # average-pool the 6 h x 5-min window to 10-min steps before the encoder
+  hidden: 48
+  static_hidden: 48
+  dropout: 0.15
+  epochs: 8
+  batch_size: 512
+  lr: 0.002
+  weight_decay: 0.0001
+  patience: 3
+  torch_threads: 4
+  quantiles: [0.1, 0.5, 0.9]
+  horizons_min: [30, 60, 90, 120]
+  ablation_epochs: 5
+
+alerting:
+  amber_target_sensitivity: 0.80   # AMBER threshold chosen on validation for this sensitivity
+  red_target_precision: 0.70       # lower bound for RED (sample-level PPV) before the false-alert budget is applied
+  red_max_false_alerts_per_day: 1.0  # RED = lowest threshold with <= 1 false alert / patient-day in validation replay
+  refractory_min: 60
+  notify_level: RED                # alerts (toasts, alert cards, audit) fire at RED; AMBER is a visual "watch" level
+
+serving:
+  model: auto               # auto | deep | gbm  (auto = best validation PR-AUC)
+  demo_patients: 12
+  default_speed: 60         # simulated seconds per wall-clock second
+  history_hours: 24
+  host: 127.0.0.1
+  port: 8000

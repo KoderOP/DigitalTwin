@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# generated data (reproducible with `make data`); never commit real data
+data/
+# trained models (reproducible with `make train`)
+artifacts/*.pt
+artifacts/*.pkl
+
+# frontend
+frontend/node_modules/
+frontend/dist/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
