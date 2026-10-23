@@ -18,6 +18,9 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from backend.engine import INJECTIONS, SPEEDS, Engine
+from backend.portal.routes import broadcast as portal_broadcast
+from backend.portal.routes import router as portal_router
+from backend.portal.service import PortalService
 from common import ROOT, get_config, get_logger, path_of
 
 log = get_logger("backend.app")
@@ -119,6 +122,7 @@ async def _loop(app: FastAPI) -> None:
                 res = await asyncio.to_thread(engine.tick)
                 await hub.send_all(engine, {"type": "tick", "state": engine.state(), "cohort": engine.cohort(),
                                             "new_alerts": res["new_alerts"]})
+                await portal_broadcast(app.state.portal)
             except Exception:  # noqa: BLE001 - keep the demo alive, but log loudly
                 log.exception("tick failed")
         interval = 300.0 / max(engine.speed, 1)
@@ -131,6 +135,7 @@ async def lifespan(app: FastAPI):
     mode = os.environ.get("DT_STREAM_MODE", "internal")
     warmup = int(os.environ.get("DT_WARMUP_DAYS", 14))
     app.state.engine = await asyncio.to_thread(Engine, None, warmup, os.environ.get("DT_START_CLOCK", "17:30"), mode)
+    app.state.portal = await asyncio.to_thread(PortalService, app.state.engine)
     app.state.hub = Hub()
     task = asyncio.create_task(_loop(app))
     yield
@@ -141,6 +146,7 @@ app = FastAPI(title="T2D Digital Twin PoC", version="1.0.0", lifespan=lifespan,
               description=f"{BANNER}. Pseudonymous synthetic patients only.")
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
                    allow_methods=["*"], allow_headers=["*"])
+app.include_router(portal_router)
 
 
 def _engine() -> Engine:
@@ -229,6 +235,7 @@ async def step_once() -> dict:
     e = _engine()
     res = await asyncio.to_thread(e.tick)
     await app.state.hub.send_all(e, {"type": "tick", "state": e.state(), "cohort": e.cohort(), "new_alerts": res["new_alerts"]})
+    await portal_broadcast(app.state.portal)
     return e.state()
 
 
@@ -278,6 +285,15 @@ async def patient(pid: str, user: str = "dr.demo") -> dict:
     return await asyncio.to_thread(e.detail, pid)
 
 
+@app.get("/api/patients/{pid}/food")
+async def food_insights(pid: str, user: str = "dr.demo") -> dict:
+    """Daily consumption pattern + personal food-impact / symptom insights for the doctor view."""
+    _twin_or_404(pid)
+    e = _engine()
+    e.audit.log(user, "view_food_insights", pid, ts_sim=e.clock())
+    return await asyncio.to_thread(app.state.portal.food, pid, "en", 180)
+
+
 @app.post("/api/patients/{pid}/whatif")
 async def what_if(pid: str, req: WhatIfRequest) -> dict:
     tw = _twin_or_404(pid)
@@ -325,6 +341,11 @@ def suggest_intervention(pid: str, req: InterventionRequest) -> dict:
     with e.lock:
         tw.notes.append(item)
     e.audit.log(req.user, "suggest_intervention", pid, {"kind": req.kind, "detail": req.detail}, ts_sim=e.clock())
+    # two-way channel: if the patient app is active, the suggestion becomes an actionable card for the patient
+    portal = app.state.portal
+    rec = portal.store.patient(pid)
+    if rec and rec["state"] == "ACTIVE":
+        portal.push_card({"sub": req.user}, pid, "intervention", req.kind.replace("_", " ").capitalize(), req.detail)
     return item
 
 
@@ -368,11 +389,16 @@ if (DIST / "assets").exists():
 
 @app.get("/{path:path}", include_in_schema=False)
 def spa(path: str):
-    if (DIST / "index.html").exists():
-        f = DIST / path
-        if path and f.is_file() and DIST in f.resolve().parents:
-            return FileResponse(f)
-        return FileResponse(DIST / "index.html")
+    """Doctor dashboard at /, patient PWA at /patient/ (both from one Vite multi-page build)."""
+    doctor_index, patient_index = DIST / "doctor" / "index.html", DIST / "patient" / "index.html"
+    if doctor_index.exists():
+        f = (DIST / path).resolve()
+        if path and f.is_file() and DIST.resolve() in f.parents:
+            resp = FileResponse(f)
+            if f.name == "sw.js":
+                resp.headers["Service-Worker-Allowed"] = "/patient/"
+            return resp
+        return FileResponse(patient_index if path.startswith("patient") else doctor_index)
     return HTMLResponse(f"<h2>{BANNER}</h2><p>Dashboard not built. Run <code>make build</code> (or "
                         "<code>python tasks.py build</code>), or start the dev server in <code>frontend/</code>. "
                         "The API is at <a href='/docs'>/docs</a>.</p>")

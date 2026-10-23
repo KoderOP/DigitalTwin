@@ -1,0 +1,315 @@
+{
+ "summary": {
+  "control": {
+   "onsets_per_patient_day": 2.06,
+   "tar_pct": 20.6,
+   "tir_pct": 79.4,
+   "tbr_pct": 0.0,
+   "mean_glucose": 156.5,
+   "suggestions": 0,
+   "followed": 0
+  },
+  "follow_50": {
+   "onsets_per_patient_day": 0.97,
+   "tar_pct": 13.0,
+   "tir_pct": 87.0,
+   "tbr_pct": 0.0,
+   "mean_glucose": 148.9,
+   "suggestions": 477,
+   "followed": 253,
+   "paired_delta_onsets_per_day": -1.08,
+   "patients_improved": 11,
+   "patients_worse": 0
+  },
+  "follow_100": {
+   "onsets_per_patient_day": 1.06,
+   "tar_pct": 10.5,
+   "tir_pct": 89.5,
+   "tbr_pct": 0.0,
+   "mean_glucose": 145.7,
+   "suggestions": 442,
+   "followed": 442,
+   "paired_delta_onsets_per_day": -1.0,
+   "patients_improved": 11,
+   "patients_worse": 1
+  }
+ },
+ "arms": {
+  "control": {
+   "adherence": 0.0,
+   "suggestions": 0,
+   "followed": 0,
+   "seconds": 17.3,
+   "patients": {
+    "TWN-10564C": {
+     "onsets_per_day": 1.3333333333333333,
+     "tar": 8.9,
+     "tir": 91.1,
+     "mean": 142.7,
+     "tbr": 0.0
+    },
+    "TWN-181BF4": {
+     "onsets_per_day": 1.0,
+     "tar": 5.5,
+     "tir": 94.5,
+     "mean": 117.0,
+     "tbr": 0.0
+    },
+    "TWN-23C6CA": {
+     "onsets_per_day": 2.3333333333333335,
+     "tar": 7.5,
+     "tir": 92.5,
+     "mean": 137.3,
+     "tbr": 0.0
+    },
+    "TWN-2922D1": {
+     "onsets_per_day": 3.3333333333333335,
+     "tar": 29.3,
+     "tir": 70.7,
+     "mean": 171.3,
+     "tbr": 0.0
+    },
+    "TWN-3A16AA": {
+     "onsets_per_day": 2.6666666666666665,
+     "tar": 11.9,
+     "tir": 88.1,
+     "mean": 141.6,
+     "tbr": 0.0
+    },
+    "TWN-3ED7D2": {
+     "onsets_per_day": 2.3333333333333335,
+     "tar": 17.8,
+     "tir": 82.2,
+     "mean": 160.3,
+     "tbr": 0.0
+    },
+    "TWN-46CBDD": {
+     "onsets_per_day": 2.0,
+     "tar": 11.1,
+     "tir": 88.9,
+     "mean": 146.5,
+     "tbr": 0.0
+    },
+    "TWN-46D99A": {
+     "onsets_per_day": 2.0,
+     "tar": 18.5,
+     "tir": 81.5,
+     "mean": 158.2,
+     "tbr": 0.0
+    },
+    "TWN-53692F": {
+     "onsets_per_day": 2.0,
+     "tar": 14.1,
+     "tir": 85.9,
+     "mean": 161.5,
+     "tbr": 0.0
+    },
+    "TWN-5ED654": {
+     "onsets_per_day": 2.3333333333333335,
+     "tar": 13.9,
+     "tir": 86.1,
+     "mean": 130.5,
+     "tbr": 0.0
+    },
+    "TWN-6331B2": {
+     "onsets_per_day": 1.0,
+     "tar": 89.0,
+     "tir": 11.0,
+     "mean": 248.7,
+     "tbr": 0.0
+    },
+    "TWN-708A77": {
+     "onsets_per_day": 2.3333333333333335,
+     "tar": 19.4,
+     "tir": 80.6,
+     "mean": 163.0,
+     "tbr": 0.0
+    }
+   }
+  },
+  "follow_50": {
+   "adherence": 0.5,
+   "suggestions": 477,
+   "followed": 253,
+   "seconds": 129.0,
+   "patients": {
+    "TWN-10564C": {
+     "onsets_per_day": 0.6666666666666666,
+     "tar": 2.1,
+     "tir": 97.9,
+     "mean": 136.9,
+     "tbr": 0.0
+    },
+    "TWN-181BF4": {
+     "onsets_per_day": 0.3333333333333333,
+     "tar": 1.1,
+     "tir": 98.9,
+     "mean": 113.6,
+     "tbr": 0.0
+    },
+    "TWN-23C6CA": {
+     "onsets_per_day": 1.0,
+     "tar": 2.3,
+     "tir": 97.7,
+     "mean": 133.0,
+     "tbr": 0.0
+    },
+    "TWN-2922D1": {
+     "onsets_per_day": 1.6666666666666667,
+     "tar": 15.6,
+     "tir": 84.4,
+     "mean": 160.9,
+     "tbr": 0.0
+    },
+    "TWN-3A16AA": {
+     "onsets_per_day": 1.0,
+     "tar": 5.7,
+     "tir": 94.3,
+     "mean": 135.9,
+     "tbr": 0.0
+    },
+    "TWN-3ED7D2": {
+     "onsets_per_day": 0.6666666666666666,
+     "tar": 5.9,
+     "tir": 94.1,
+     "mean": 154.2,
+     "tbr": 0.0
+    },
+    "TWN-46CBDD": {
+     "onsets_per_day": 0.6666666666666666,
+     "tar": 6.0,
+     "tir": 94.0,
+     "mean": 141.3,
+     "tbr": 0.0
+    },
+    "TWN-46D99A": {
+     "onsets_per_day": 0.3333333333333333,
+     "tar": 6.2,
+     "tir": 93.8,
+     "mean": 149.0,
+     "tbr": 0.0
+    },
+    "TWN-53692F": {
+     "onsets_per_day": 1.3333333333333333,
+     "tar": 10.2,
+     "tir": 89.8,
+     "mean": 156.7,
+     "tbr": 0.0
+    },
+    "TWN-5ED654": {
+     "onsets_per_day": 2.0,
+     "tar": 9.1,
+     "tir": 90.9,
+     "mean": 124.5,
+     "tbr": 0.0
+    },
+    "TWN-6331B2": {
+     "onsets_per_day": 1.0,
+     "tar": 81.1,
+     "tir": 18.9,
+     "mean": 226.9,
+     "tbr": 0.0
+    },
+    "TWN-708A77": {
+     "onsets_per_day": 1.0,
+     "tar": 10.4,
+     "tir": 89.6,
+     "mean": 154.3,
+     "tbr": 0.0
+    }
+   }
+  },
+  "follow_100": {
+   "adherence": 1.0,
+   "suggestions": 442,
+   "followed": 442,
+   "seconds": 123.5,
+   "patients": {
+    "TWN-10564C": {
+     "onsets_per_day": 0.3333333333333333,
+     "tar": 1.2,
+     "tir": 98.8,
+     "mean": 133.7,
+     "tbr": 0.0
+    },
+    "TWN-181BF4": {
+     "onsets_per_day": 0.3333333333333333,
+     "tar": 2.0,
+     "tir": 98.0,
+     "mean": 113.8,
+     "tbr": 0.0
+    },
+    "TWN-23C6CA": {
+     "onsets_per_day": 1.0,
+     "tar": 2.0,
+     "tir": 98.0,
+     "mean": 131.7,
+     "tbr": 0.0
+    },
+    "TWN-2922D1": {
+     "onsets_per_day": 1.3333333333333333,
+     "tar": 11.3,
+     "tir": 88.7,
+     "mean": 157.5,
+     "tbr": 0.0
+    },
+    "TWN-3A16AA": {
+     "onsets_per_day": 1.0,
+     "tar": 4.8,
+     "tir": 95.2,
+     "mean": 132.6,
+     "tbr": 0.0
+    },
+    "TWN-3ED7D2": {
+     "onsets_per_day": 1.3333333333333333,
+     "tar": 3.3,
+     "tir": 96.7,
+     "mean": 150.4,
+     "tbr": 0.0
+    },
+    "TWN-46CBDD": {
+     "onsets_per_day": 1.0,
+     "tar": 4.6,
+     "tir": 95.4,
+     "mean": 139.5,
+     "tbr": 0.0
+    },
+    "TWN-46D99A": {
+     "onsets_per_day": 0.6666666666666666,
+     "tar": 7.0,
+     "tir": 93.0,
+     "mean": 147.8,
+     "tbr": 0.0
+    },
+    "TWN-53692F": {
+     "onsets_per_day": 0.6666666666666666,
+     "tar": 5.7,
+     "tir": 94.3,
+     "mean": 152.7,
+     "tbr": 0.0
+    },
+    "TWN-5ED654": {
+     "onsets_per_day": 2.0,
+     "tar": 8.1,
+     "tir": 91.9,
+     "mean": 121.9,
+     "tbr": 0.0
+    },
+    "TWN-6331B2": {
+     "onsets_per_day": 2.0,
+     "tar": 71.3,
+     "tir": 28.7,
+     "mean": 215.3,
+     "tbr": 0.0
+    },
+    "TWN-708A77": {
+     "onsets_per_day": 1.0,
+     "tar": 5.0,
+     "tir": 95.0,
+     "mean": 151.0,
+     "tbr": 0.0
+    }
+   }
+  }
+ }
+}

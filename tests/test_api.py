@@ -1,28 +1,7 @@
 """End-to-end API test: engine warm-up, cohort, twin view, what-if, injection, alerts, audit, consent."""
-import os
-
-import pytest
-
 from conftest import needs_models
 
 pytestmark = needs_models
-
-
-@pytest.fixture(scope="module")
-def client():
-    os.environ["DT_WARMUP_DAYS"] = "3"
-    os.environ["DT__PATHS__DB_PATH"] = "data/test_audit.sqlite3"  # keep the demo's audit trail clean
-    os.environ["DT__SERVING__DEMO_PATIENTS"] = "4"
-    from common.config import get_config
-
-    get_config.cache_clear()
-    from fastapi.testclient import TestClient
-
-    from backend.app import app
-
-    with TestClient(app) as c:
-        c.post("/api/sim/pause", json={"paused": True})
-        yield c
 
 
 def test_health_and_meta(client):

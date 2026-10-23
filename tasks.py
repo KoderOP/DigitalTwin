@@ -5,7 +5,9 @@
     python tasks.py train      # train all models + evaluation report (~15 min on a laptop CPU)
     python tasks.py build      # build the React dashboard
     python tasks.py demo       # run whatever is missing above, then serve http://127.0.0.1:8000
-    python tasks.py dev        # backend + Vite dev server with hot reload
+    python tasks.py dev        # backend + Vite dev server (/doctor/ and /patient/) with hot reload
+    python tasks.py behaviour  # simulated behaviour-response study -> reports/behaviour_response.md
+    python tasks.py reset-portal  # wipe demo invites / consents / logs (fresh provisioning demo)
     python tasks.py test       # pytest + frontend tests
     python tasks.py all        # setup -> data -> train -> build -> test
 """
@@ -76,10 +78,14 @@ def demo() -> None:
         data()
     if not (ROOT / "artifacts" / "serving.json").exists():
         train()
-    if not (FRONT / "dist" / "index.html").exists():
+    if not (FRONT / "dist" / "doctor" / "index.html").exists() or not (FRONT / "dist" / "patient" / "index.html").exists():
         build()
     url = "http://127.0.0.1:8000"
-    print(f"\nStarting the Digital Twin demo at {url}. The engine warms up in about 30 s. Ctrl+C to stop.\n", flush=True)
+    print("\nStarting the Digital Twin demo (one server, three parts). The engine warms up in about 30 s. Ctrl+C to stop.\n"
+          f"  Backend API + docs : {url}/docs\n"
+          f"  Doctor dashboard   : {url}/\n"
+          f"  Patient app (PWA)  : {url}/patient/  (opened from the doctor's invite link / QR code)\n"
+          "  Phone on the same Wi-Fi: set DT_HOST=0.0.0.0 and DT__PORTAL__PUBLIC_BASE_URL=http://<your-LAN-IP>:8000\n", flush=True)
     if not os.environ.get("DT_NO_BROWSER"):
         threading_open(url)
     run([py(), "-m", "backend.app"])
@@ -108,13 +114,25 @@ def test() -> None:
     run([NPM, "test"], cwd=FRONT)
 
 
+def behaviour() -> None:
+    run([py(), "-W", "ignore", "-m", "ml.behaviour_sim"])
+
+
+def reset_portal() -> None:
+    """Fresh demo state: deletes the audit/portal SQLite DB (all invites, consents, logs). Synthetic data only."""
+    db = ROOT / "data" / "audit.sqlite3"
+    if db.exists():
+        db.unlink()
+        print(f"deleted {db}")
+
+
 def clean() -> None:
     for p in ("artifacts", "reports/figures", "frontend/dist"):
         shutil.rmtree(ROOT / p, ignore_errors=True)
 
 
 TASKS = {"setup": setup, "data": data, "train": train, "evaluate": evaluate, "build": build, "demo": demo, "dev": dev,
-         "test": test, "clean": clean, "all": lambda: [f() for f in (setup, data, train, build, test)]}
+         "test": test, "clean": clean, "behaviour": behaviour, "reset-portal": reset_portal, "all": lambda: [f() for f in (setup, data, train, build, test)]}
 
 if __name__ == "__main__":
     names = sys.argv[1:] or ["demo"]

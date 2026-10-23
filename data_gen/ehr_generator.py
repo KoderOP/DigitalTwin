@@ -64,7 +64,10 @@ def generate_ehr(n: int, rng: np.random.Generator, urban_fraction: float = 0.6) 
         0.35 * (tcf7l2 - 0.60) + 0.15 * (slc30a8 - 1.40) + 0.20 * (kcnq1 - 1.10)
         + 0.45 * family_history + rng.normal(0, 0.8, n)
     )
-    prs = (prs - prs.mean()) / prs.std()  # standardised polygenic risk score
+    if n >= 30:
+        prs = (prs - prs.mean()) / prs.std()  # standardised polygenic risk score
+    else:  # tiny cohorts (e.g. one new patient): analytic population mean / SD of the raw score above
+        prs = (prs - 0.2475) / 0.878
 
     # Duration and early onset: higher PRS -> earlier diagnosis (ASSUMPTION)
     duration = np.clip(rng.gamma(2.0, 3.5, n) + 0.8 * np.clip(prs, 0, None), 0.2, 30)

@@ -43,7 +43,7 @@ class DigitalTwin:
         self.predictor = predictor
         self.rows: deque[dict] = deque(maxlen=buffer_rows)  # ~50 h of 5-min rows (features need 48 h)
         self.cgm_hist: deque[tuple[pd.Timestamp, float]] = deque(maxlen=agp_rows)
-        self.events: deque[dict] = deque(maxlen=400)
+        self.events: deque[dict] = deque(maxlen=1000)  # logged meals / medication (14-day food diary)
         self.pred_hist: deque[dict] = deque(maxlen=288)
         self.sim = PersonalizedSimulator(pd.Series(ehr_raw))
         self.prediction: dict | None = None
@@ -56,9 +56,16 @@ class DigitalTwin:
     # ------------------------------------------------------------------------------------------
     # ingestion (online state update)
     # ------------------------------------------------------------------------------------------
-    def ingest_history(self, ts: pd.Timestamp, cgm: float) -> None:
-        """Long-term CGM history only (used for the AGP); no state update."""
+    def ingest_history(self, ts: pd.Timestamp, cgm: float, events: list[dict] | None = None) -> None:
+        """Long-term history only (CGM for the AGP, logged events for the food diary); no state update."""
         self.cgm_hist.append((ts, cgm))
+        for e in events or []:
+            self.events.append(self._event_row(e))
+
+    @staticmethod
+    def _event_row(e: dict) -> dict:
+        return {"ts": pd.Timestamp(e["ts"]).isoformat(), "type": e.get("type"), "name": e.get("name"),
+                "label": e.get("label"), "amount": _clean(e.get("logged_amount")), "injected": bool(e.get("injected", False))}
 
     def ingest(self, rec: dict, events: list[dict] | None = None) -> None:
         """Ingest one 5-min device record (+ logged events in that interval) and update the twin."""
@@ -72,8 +79,7 @@ class DigitalTwin:
                 row["carbs"] += float(e.get("logged_amount", 0))
             elif e.get("name") in EVENT_CHANNEL:
                 row[EVENT_CHANNEL[e["name"]]] += float(e.get("logged_amount", 0))
-            self.events.append({"ts": pd.Timestamp(e["ts"]).isoformat(), "type": e.get("type"), "name": e.get("name"),
-                                "label": e.get("label"), "amount": _clean(e.get("logged_amount")), "injected": bool(e.get("injected", False))})
+            self.events.append(self._event_row(e))
         woke = bool(self.rows) and self.rows[-1]["sleep_stage"] > 0 and row["sleep_stage"] == 0 and 5 <= ts.hour <= 11
         self.rows.append(row)
         self.cgm_hist.append((ts, row["cgm"]))

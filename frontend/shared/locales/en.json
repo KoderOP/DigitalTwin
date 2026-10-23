@@ -1,0 +1,187 @@
+{
+  "app": {
+    "title": "My Sugar Twin",
+    "synthetic": "SYNTHETIC DATA ONLY: NOT FOR CLINICAL USE",
+    "not_advice": "Demo estimate, not medical advice",
+    "offline": "You are offline. Showing the last saved view."
+  },
+  "nav": {
+    "home": "Home",
+    "day": "My Day",
+    "log": "Log",
+    "try": "Try it",
+    "care": "Care",
+    "me": "Me"
+  },
+  "common": {
+    "loading": "Loading…",
+    "next": "Next",
+    "back": "Back",
+    "done": "Done",
+    "save": "Save",
+    "yes": "Yes",
+    "no": "No",
+    "close": "Close",
+    "read_aloud": "Read aloud",
+    "min": "min"
+  },
+  "onboarding": {
+    "welcome_title": "Welcome",
+    "welcome_body": "{{doctor}} has set up this app for you. It shows how your sugar may change and simple things that can help.",
+    "otp_title": "Enter your code",
+    "otp_body": "We sent a 6-digit code to your phone.",
+    "otp_label": "6-digit code",
+    "verify": "Verify",
+    "demo_code": "Demo: show my code",
+    "consent_title": "Your data, your choice",
+    "consent_purpose": "Purpose: to show you and your care team how your sugar may change in the next 2 hours.",
+    "consent_data": "What is used: your sensor readings, sleep, steps, and what you log in this app.",
+    "consent_who": "Who sees it: you and {{doctor}}'s care team. Nobody else.",
+    "consent_rights": "Your rights: see who viewed your data, change language, and withdraw at any time.",
+    "consent_synthetic": "This is a demo with simulated (synthetic) data. It is not medical advice.",
+    "choice_share_logs": "Share my food and activity logs with my doctor",
+    "choice_caregiver": "Allow a family member to see my status",
+    "accept": "I agree",
+    "decline": "Not now",
+    "language_title": "Choose your language",
+    "tour_1": "Your status: a simple colour, an icon and a sentence tell you how your sugar is doing.",
+    "tour_2": "Log in one tap: meals, walks and medicines help your twin learn about you.",
+    "tour_3": "Try it: see what a walk or a different meal could do. These are estimates.",
+    "wearable_title": "Connect your sensor",
+    "wearable_body": "Demo: your sugar sensor and watch are simulated.",
+    "connect": "Connect (simulated)",
+    "connected": "Connected",
+    "start": "Start"
+  },
+  "home": {
+    "now": "Sugar now",
+    "next2h": "Next 2 hours (estimate)",
+    "target": "Your target {{low}}-{{high}}",
+    "next_action": "What you can do now",
+    "why": "Why is this happening?",
+    "care_team": "{{doctor}}'s care plan",
+    "sensor_gap": "Sensor gap: showing an estimate",
+    "confidence": "Confidence"
+  },
+  "levels": {
+    "GREEN": "Good",
+    "AMBER": "Watch",
+    "RED": "Act",
+    "HIGH": "High now",
+    "LOW": "Low: act now"
+  },
+  "day": {
+    "title": "My Day",
+    "empty": "Nothing logged yet today."
+  },
+  "try": {
+    "title": "Try it",
+    "subtitle": "See what could help. These are estimates from your twin.",
+    "before": "Without",
+    "after": "With",
+    "rice": "Rice",
+    "roti": "Roti",
+    "late": "Late dinner",
+    "early": "Earlier dinner",
+    "walk": "Walk",
+    "q": {
+      "walk15": "What if I walk 15 minutes now?",
+      "roti_rice": "What if I eat roti instead of rice?",
+      "early_dinner": "What if I have dinner earlier?"
+    }
+  },
+  "log": {
+    "title": "Quick log",
+    "meal": "Meal",
+    "portion": "How much?",
+    "small": "Small",
+    "regular": "Regular",
+    "large": "Large",
+    "walk": "Walk",
+    "walk15": "15 min walk",
+    "walk30": "30 min walk",
+    "med": "Medicine",
+    "taken": "Taken",
+    "missed": "Missed",
+    "symptoms": "How do you feel?",
+    "saved": "Saved! Your twin will update in a few minutes.",
+    "med_note": "Medicine questions? Message your doctor. The app never changes your medicine."
+  },
+  "symptoms": {
+    "dizziness": "Dizzy",
+    "thirst": "Thirsty",
+    "fatigue": "Tired",
+    "sweating": "Sweaty / shaky"
+  },
+  "food": {
+    "idli_sambar": "Idli-sambar",
+    "dal_chawal": "Dal-chawal",
+    "roti_sabzi": "Roti-sabzi",
+    "poha": "Poha",
+    "biryani": "Biryani"
+  },
+  "care": {
+    "title": "Alerts and care plan",
+    "alerts": "Alerts",
+    "no_alerts": "No alerts. Nice!",
+    "understood": "Did this make sense?",
+    "plan": "My care plan",
+    "mark_done": "Mark done",
+    "done": "Done",
+    "messages": "Messages from your doctor",
+    "first_aid": "What to do now",
+    "call": "Call 108 (emergency)",
+    "safety_on": "Safety alerts are always on."
+  },
+  "me": {
+    "progress": "My progress",
+    "today": "Today in range",
+    "week": "This week",
+    "streak": "Streak",
+    "privacy": "Privacy and consent",
+    "shared": "What is shared",
+    "shared_sensor": "Sensor and watch readings",
+    "shared_logs": "Your logs (if you chose to share)",
+    "shared_doctor": "Seen by {{doctor}}'s care team",
+    "access_log": "Who viewed my data",
+    "language": "Language",
+    "caregiver": "Family view link",
+    "caregiver_make": "Create family link",
+    "withdraw": "Withdraw consent",
+    "withdraw_confirm": "This stops the app and all data sharing now. Continue?",
+    "withdrawn": "You withdrew consent. The app is now disconnected."
+  },
+  "state": {
+    "paused": "Your care team has paused the app for now.",
+    "revoked": "This app is no longer active. Ask your doctor if you want to use it again.",
+    "invalid": "This link does not work. Ask your doctor for a new one.",
+    "preview": "Doctor preview: this is exactly what the patient sees",
+    "caregiver": "Family view (read-only)"
+  },
+  "foodai": {
+    "title": "My food patterns",
+    "watch": "Watch",
+    "ok": "Usually fine",
+    "watch_list": "Foods to watch",
+    "patterns": "Patterns we noticed",
+    "symptoms": "Symptoms after foods",
+    "diary": "Food diary (last 7 days)",
+    "today": "Today",
+    "carbs": "g carbs",
+    "spikes": "high after meal",
+    "late": "late meals",
+    "empty": "Log your meals to see which foods affect your sugar.",
+    "confidence": {
+      "high": "reliable",
+      "medium": "some evidence",
+      "low": "early sign"
+    },
+    "peak": "peak"
+  },
+  "demo": {
+    "title": "Demo patient accounts",
+    "subtitle": "Synthetic patients already set up by their doctor. One tap to open.",
+    "or_invite": "Or open the invite link your doctor sent you.",
+    "open": "Open"
+  }
+}

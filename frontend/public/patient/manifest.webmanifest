@@ -1,0 +1,13 @@
+{
+  "name": "My Sugar Twin (synthetic demo)",
+  "short_name": "Sugar Twin",
+  "description": "Patient app for the T2D digital twin research demo. SYNTHETIC DATA ONLY: NOT FOR CLINICAL USE.",
+  "start_url": "/patient/",
+  "scope": "/patient/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0072B2",
+  "icons": [
+    { "src": "/patient/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

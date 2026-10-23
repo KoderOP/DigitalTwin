@@ -10,15 +10,19 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "i18next": "23.16.4",
     "lucide-react": "0.453.0",
+    "qrcode": "1.5.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-i18next": "15.1.0",
     "recharts": "2.13.3"
   },
   "devDependencies": {
     "@testing-library/dom": "10.4.0",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.0.1",
+    "@types/qrcode": "1.5.5",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "4.3.3",

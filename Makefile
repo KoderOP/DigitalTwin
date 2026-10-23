@@ -1,7 +1,7 @@
 # Thin wrapper around tasks.py so the same commands work on Linux/macOS (make) and Windows (python tasks.py ...).
 PYTHON ?= $(shell command -v python3 2>/dev/null || command -v python)
 
-.PHONY: setup data train evaluate build demo dev test clean all docker
+.PHONY: setup data train evaluate build demo dev test clean all docker behaviour reset-portal
 
 setup:     ; $(PYTHON) tasks.py setup
 data:      ; $(PYTHON) tasks.py data
@@ -13,4 +13,6 @@ dev:       ; $(PYTHON) tasks.py dev
 test:      ; $(PYTHON) tasks.py test
 clean:     ; $(PYTHON) tasks.py clean
 all:       ; $(PYTHON) tasks.py all
+behaviour: ; $(PYTHON) tasks.py behaviour
+reset-portal: ; $(PYTHON) tasks.py reset-portal
 docker:    ; docker compose up --build

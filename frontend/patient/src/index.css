@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Patient app: larger base font (scales with the browser setting), big touch targets. */
+html { font-size: 106.25%; }
+:root { color-scheme: light; }
+:root.dark { color-scheme: dark; }
+body { font-family: "Noto Sans", "Noto Sans Devanagari", "Noto Sans Tamil", system-ui, "Segoe UI", Roboto, sans-serif; }
+button:focus-visible, input:focus-visible, a:focus-visible { @apply outline outline-4 outline-offset-2 outline-brand; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

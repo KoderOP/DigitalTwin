@@ -1,8 +1,54 @@
-# T2D Digital Twin: real-time hyperglycemia early warning (PoC)
+# Sugar Twin: a real-time Digital Twin for Type 2 Diabetes (India)
 
 > ## ⚠️ SYNTHETIC DATA ONLY: NOT FOR CLINICAL USE
 > Research prototype. Every patient and every signal is simulated. It is not a medical device and has no
 > clinical validation. See [docs/PRIVACY_ETHICS.md](docs/PRIVACY_ETHICS.md).
+
+## Submission summary
+
+| Item | Details |
+|---|---|
+| **Project title** | Sugar Twin: a real-time, EHR + wearable fused Digital Twin that predicts Type 2 Diabetes glucose spikes 2 hours ahead |
+| **Team** | [FILL IN: team name] |
+| **Members** | [FILL IN: name, role] · [FILL IN: name, role] · [FILL IN: name, role] |
+| **College / incubator** | [FILL IN: college] · [FILL IN: incubator / programme] |
+| **Contact** | [FILL IN: team email (optional)] |
+| **Demo video (≥ 20 min)** | [FILL IN: unlisted YouTube link]. Recording script: [docs/submission/VIDEO_SCRIPT.md](docs/submission/VIDEO_SCRIPT.md) |
+| **Presentation** | [docs/submission/Presentation.pptx](docs/submission/Presentation.pptx) · PDF: [docs/submission/Presentation.pdf](docs/submission/Presentation.pdf) (19 slides, speaker notes ≈ 23 min) |
+| **Architecture diagram** | [docs/submission/Architecture_Diagram.pdf](docs/submission/Architecture_Diagram.pdf) · PPT: [docs/submission/Architecture_Diagram.pptx](docs/submission/Architecture_Diagram.pptx) |
+| **License** | [MIT](LICENSE) (open source). Medical disclaimer included |
+
+### Problem statement
+India has about 101 million people living with diabetes (ICMR-INDIAB, 2023), most of them with type 2 diabetes.
+Control is usually judged by HbA1c every ~3 months, an average that hides the daily **post-meal glucose spikes**.
+Rice- and wheat-heavy meals, late dinners, the high-waist "thin-fat" phenotype and early onset make these spikes
+common. Continuous glucose monitors and smartwatches now stream rich data, but nobody turns that data, together
+with the patient's health record, into **timely, explainable, personalised** action.
+
+### Healthcare use case
+A per-patient digital twin for **Type 2 Diabetes**. Every 5 minutes it predicts whether glucose will exceed
+**180 mg/dL within the next 120 minutes**. It gives a calibrated risk, a 2-hour forecast with an uncertainty band,
+a GREEN/AMBER/RED level with a countdown, a plain-language explanation and what-if simulations. Doctors triage
+patients on a live dashboard and **launch a consent-first patient app** (English / Hindi / Tamil) for their patients.
+
+### Technical stack and AI/ML models
+| Layer | Technology |
+|---|---|
+| Data (privacy-safe) | Custom synthetic Indian T2D EHR generator (FHIR R4 export) + physiological world simulator (extended Bergman minimal model, Indian meals, drugs, sleep, exercise, stress, CGM artefacts). Optional Synthea / open-CGM / MIMIC-IV adapters |
+| ML | **PyTorch** multimodal fusion: GRU temporal encoder (6 h × 17 channels) + EHR MLP, EHR-conditioned cross-attention and gated fusion, with heads for spike, hypo and P10/P50/P90 forecasts at 4 horizons. **LightGBM** baseline on 118 causal features. Isotonic calibration (scikit-learn). Explainability with **SHAP** (TreeSHAP) and Integrated Gradients. Ablations: wearable-only / EHR-only / fused |
+| Digital twin | Personalised simulator (EHR prior + online CGM observer + 6-hourly calibration) and a parallel what-if engine |
+| Backend | Python 3.12, **FastAPI**, Uvicorn, WebSockets, Pydantic, SQLite (audit + consent), PyJWT (role-based access) |
+| Frontend | **React 18 + Vite + TypeScript**, Tailwind CSS, Recharts, react-i18next, installable PWA (patient app) |
+| Ops / quality | Makefile + cross-platform `tasks.py`, Docker Compose, 63 pytest + 16 vitest tests (including end-to-end) |
+
+**Key results (23 unseen synthetic test patients):** ROC-AUC 0.938, PR-AUC 0.873 (random = 0.312). At the RED
+notification level, 80% of spikes are caught, on average 45 min ahead, with ~1.0 false alert per patient-day
+(AMBER watch level: ~85 min ahead). Forecast RMSE at +60 min: 25.2 vs 33.9 mg/dL for "no change". Full report:
+[reports/evaluation_report.md](reports/evaluation_report.md).
+
+---
+
+## Overview
 
 A per-patient **Digital Twin** for **Type 2 Diabetes in an Indian / South-Asian context**. It fuses a
 static synthetic **EHR** (demographics, labs, medications, comorbidities, simulated risk SNPs + PRS,
@@ -46,6 +92,34 @@ Configuration lives in [config/default.yaml](config/default.yaml). Any key can b
 
 ---
 
+## Patient interface (doctor-initiated)
+
+A patient app exists only when a doctor launches it for one of **their** patients. The flow:
+**enrol -> configure (templates, < 2 min) -> secure single-use invite (link + QR, expiry, resend/regenerate) -> OTP
+-> consent -> ACTIVE**, with pause/revoke by the doctor and withdrawal by the patient at any time. The doctor dashboard and the
+mobile-first PWA (`/patient/`, English / हिन्दी / தமிழ்) are two role-based clients of the **same twin and the same
+real-time stream**.
+
+* Patient screens: Home ("My Sugar Today": icon + text status, one sentence, glucose + trend, 2-h estimate inside the
+  target zone, one next action), My Day (timeline + "Why is this happening?" in plain language from the model's attributions),
+  Try it (walk / roti vs rice / earlier dinner), Quick Log (Indian food presets, walk, medicine taken/missed, symptoms),
+  Care (prioritised alerts, care-plan cards, doctor messages), Me (progress, privacy and consent centre, access log, withdraw).
+* **Food diary + personal food-impact AI:** every logged meal is matched to the patient's own CGM response. The twin flags
+  foods that push *this* patient's sugar up more than their usual meal, detects patterns (late dinners, rice vs roti), links
+  reported symptoms to foods eaten in the 4 h before, and warns gently when a flagged food is logged again (patient app and
+  doctor dashboard).
+* **3 demo patient accounts** (English / हिन्दी / தமிழ்): open `/patient/` and tap one. They are pre-activated through the
+  audited lifecycle (demo only, `portal.demo_accounts_enabled`).
+* Safety: RED and low-glucose alerts are always on (schema-enforced, never capped), with first aid and tap-to-call 108.
+  Every alert has a confidence level and a "not medical advice" notice. The app never changes medication.
+* Security: JWT roles (doctor / patient / caregiver / preview), device binding, OTP lockout, rate limits, consent gate, full audit.
+
+Details: [docs/PATIENT_INTERFACE.md](docs/PATIENT_INTERFACE.md) · demo: [docs/DEMO_PATIENT.md](docs/DEMO_PATIENT.md) ·
+usability kit: [docs/USABILITY.md](docs/USABILITY.md) · plan: [PATIENT_PLAN.md](PATIENT_PLAN.md).
+`make demo` serves the backend, doctor dashboard (`/`) and patient app (`/patient/`) together on one port.
+
+---
+
 ## Architecture
 
 ```mermaid
@@ -75,7 +149,8 @@ Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 | [`ml/`](ml) | Features and labels, LightGBM baseline, PyTorch fusion model, training, evaluation, report, explainability |
 | [`twin/`](twin) | `DigitalTwin`, personalised simulator, what-if engine, serving predictor |
 | [`backend/`](backend) | FastAPI + WebSocket engine, audit/consent store, external stream client |
-| [`frontend/`](frontend) | React + Vite + TypeScript + Tailwind + Recharts dashboard |
+| [`frontend/`](frontend) | React + Vite + TypeScript + Tailwind + Recharts: `doctor/` dashboard, `patient/` PWA, `shared/` components + i18n |
+| [`backend/portal/`](backend/portal) | Patient-interface provisioning: lifecycle, JWT/RBAC, invites/OTP, consent, notifications, plain-language and i18n content |
 | [`reports/`](reports) | `evaluation_report.md`, `metrics.json`, figures |
 | [`docs/`](docs) | Architecture, data dictionary, assumptions register, privacy & ethics, demo script, presentation summary |
 | [`tests/`](tests) | pytest suite (generator, physiology, features causality, alerts, twin, API) |
@@ -181,3 +256,10 @@ already included), a prospective silent trial, and CDSCO SaMD regulatory work. S
 | MIMIC-IV | Optional credentialed adapter: [data_gen/mimic_adapter.py](data_gen/mimic_adapter.py) |
 
 Demo script: [docs/DEMO.md](docs/DEMO.md) · Presentation summary: [docs/PRESENTATION.md](docs/PRESENTATION.md) · Plan: [PLAN.md](PLAN.md)
+
+## License
+
+Released under the [MIT License](LICENSE). The software is provided "as is". It is a research prototype on
+synthetic data and is **not** a medical device. Third-party dependencies keep their own licenses (listed in
+`requirements.txt` and `frontend/package.json`; all are permissive open-source licenses such as MIT, BSD or Apache-2.0).
+The submission decks can be rebuilt with `cd docs/submission/build && npm install && node build_decks.js`.
