@@ -9,14 +9,15 @@
 | Item | Details |
 |---|---|
 | **Project title** | Sugar Twin: a real-time, EHR + wearable fused Digital Twin that predicts Type 2 Diabetes glucose spikes 2 hours ahead |
-| **Team** | [FILL IN: team name] |
-| **Members** | [FILL IN: name, role] · [FILL IN: name, role] · [FILL IN: name, role] |
-| **College / incubator** | [FILL IN: college] · [FILL IN: incubator / programme] |
-| **Contact** | [FILL IN: team email (optional)] |
-| **Demo video (≥ 20 min)** | [FILL IN: unlisted YouTube link]. Recording script: [docs/submission/VIDEO_SCRIPT.md](docs/submission/VIDEO_SCRIPT.md) |
-| **Presentation** | [docs/submission/Presentation.pptx](docs/submission/Presentation.pptx) · PDF: [docs/submission/Presentation.pdf](docs/submission/Presentation.pdf) (19 slides, speaker notes ≈ 23 min) |
+| **Name** | iCODE |
+| **Leader** | Harshita Arora |
+| **College - Course ** | Shaheed Sukhdev College of Business Studies - B.Sc. Hons. Computer Science |
+| **Contact Email_ID** | harshita.24562@sscbs.du.ac.in |
+| **Demo video** | https://youtu.be/h0Ik041BMGs | https://docs.google.com/videos/d/1bJnY1mFLlXEIOrsgiUXPESCEkGY-HuCoO_ns-mUuwcM/play?usp=sharing |
+
+| **Presentation** | [docs/submission/Presentation.pptx](docs/submission/Presentation.pptx) · PDF: [docs/submission/Presentation.pdf](docs/submission/Presentation.pdf) 
 | **Architecture diagram** | [docs/submission/Architecture_Diagram.pdf](docs/submission/Architecture_Diagram.pdf) · PPT: [docs/submission/Architecture_Diagram.pptx](docs/submission/Architecture_Diagram.pptx) |
-| **License** | [MIT](LICENSE) (open source). Medical disclaimer included |
+
 
 ### Problem statement
 India has about 101 million people living with diabetes (ICMR-INDIAB, 2023), most of them with type 2 diabetes.
@@ -29,7 +30,7 @@ with the patient's health record, into **timely, explainable, personalised** act
 A per-patient digital twin for **Type 2 Diabetes**. Every 5 minutes it predicts whether glucose will exceed
 **180 mg/dL within the next 120 minutes**. It gives a calibrated risk, a 2-hour forecast with an uncertainty band,
 a GREEN/AMBER/RED level with a countdown, a plain-language explanation and what-if simulations. Doctors triage
-patients on a live dashboard and **launch a consent-first patient app** (English / Hindi / Tamil) for their patients.
+patients on a live dashboard and **launch a consent-first patient app** (English / Hindi) for their patients.
 
 ### Technical stack and AI/ML models
 | Layer | Technology |
